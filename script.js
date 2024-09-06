@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.getElementById("solve-btn").addEventListener("click", solveSudoku);
-  document.getElementById("reveal-one").addEventListener("click", revealOne);
   document.getElementById("clear-btn").addEventListener("click", clearGrid);
 
   function getGridValues() {
@@ -31,6 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function solveSudoku() {
     const values = getGridValues();
+    if (values.every((value) => value === 0)) {
+      alert("The grid is empty!");
+      return;
+    }
+
     const board = [];
 
     for (let i = 0; i < 9; i++) {
@@ -79,22 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     return true;
-  }
-
-  function revealOne() {
-    if (!solution) {
-      solveSudoku();
-    }
-
-    const values = getGridValues();
-
-    for (let i = 0; i < 81; i++) {
-      if (values[i] === 0) {
-        values[i] = solution[i];
-        break;
-      }
-    }
-    setGridValues(values);
   }
 
   function revealCell(index) {
