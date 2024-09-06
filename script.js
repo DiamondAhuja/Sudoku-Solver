@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   const grid = document.getElementById("grid");
-  let solution = null; // To store the solved board
+  let solution = null;
+  let isCleared = false;
 
-  // Create the grid of input fields
   for (let i = 0; i < 81; i++) {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
@@ -38,8 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (solve(board)) {
-      solution = board.flat(); // Store the solved board
+      solution = board.flat();
       setGridValues(solution);
+      isCleared = false;
     } else {
       alert("No solution found!");
     }
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function revealOne() {
     if (!solution) {
-      solveSudoku(); // Solve the Sudoku if not already solved
+      solveSudoku();
     }
 
     const values = getGridValues();
@@ -97,8 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function revealCell(index) {
-    if (!solution) {
-      solveSudoku(); // Solve the Sudoku if not already solved
+    if (!solution || isCleared) {
+      return;
     }
 
     const values = getGridValues();
@@ -109,7 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function clearGrid() {
-    solution = null; // Clear the stored solution
+    solution = null;
+    isCleared = true;
     document
       .querySelectorAll("#grid input")
       .forEach((input) => (input.value = ""));
