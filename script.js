@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
     input.setAttribute("maxlength", "1");
+    input.addEventListener("input", () => markUserInput(input));
     input.addEventListener("click", () => revealCell(i));
     grid.appendChild(input);
   }
@@ -24,7 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function setGridValues(values) {
     document.querySelectorAll("#grid input").forEach((input, index) => {
-      input.value = values[index] !== 0 ? values[index] : "";
+      if (input.classList.contains("user-input")) {
+        input.value = values[index] !== 0 ? values[index] : "";
+      } else {
+        input.value = values[index] !== 0 ? values[index] : "";
+        input.classList.remove("user-input");
+      }
     });
   }
 
@@ -97,11 +103,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function markUserInput(input) {
+    if (input.value) {
+      input.classList.add("user-input");
+    } else {
+      input.classList.remove("user-input");
+    }
+  }
+
   function clearGrid() {
     solution = null;
     isCleared = true;
-    document
-      .querySelectorAll("#grid input")
-      .forEach((input) => (input.value = ""));
+    document.querySelectorAll("#grid input").forEach((input) => {
+      input.value = "";
+      input.classList.remove("user-input");
+    });
   }
 });
