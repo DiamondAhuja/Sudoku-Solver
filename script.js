@@ -1,17 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   const grid = document.getElementById("grid");
+  let solution = null; // To store the solved board
 
   // Create the grid of input fields
   for (let i = 0; i < 81; i++) {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
     input.setAttribute("maxlength", "1");
+    input.addEventListener("click", () => revealCell(i));
     grid.appendChild(input);
   }
 
   document.getElementById("solve-btn").addEventListener("click", solveSudoku);
   document.getElementById("reveal-one").addEventListener("click", revealOne);
-  document.getElementById("reveal-all").addEventListener("click", revealAll);
+  document.getElementById("clear-btn").addEventListener("click", clearGrid);
 
   function getGridValues() {
     const values = [];
@@ -36,7 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (solve(board)) {
-      setGridValues(board.flat());
+      solution = board.flat(); // Store the solved board
+      setGridValues(solution);
     } else {
       alert("No solution found!");
     }
@@ -78,27 +81,37 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function revealOne() {
-    const values = getGridValues();
-    const board = [];
-
-    for (let i = 0; i < 9; i++) {
-      board.push(values.slice(i * 9, (i + 1) * 9));
+    if (!solution) {
+      solveSudoku(); // Solve the Sudoku if not already solved
     }
 
-    if (solve(board)) {
-      for (let i = 0; i < 81; i++) {
-        if (values[i] === 0) {
-          values[i] = board[Math.floor(i / 9)][i % 9];
-          break;
-        }
+    const values = getGridValues();
+
+    for (let i = 0; i < 81; i++) {
+      if (values[i] === 0) {
+        values[i] = solution[i];
+        break;
       }
+    }
+    setGridValues(values);
+  }
+
+  function revealCell(index) {
+    if (!solution) {
+      solveSudoku(); // Solve the Sudoku if not already solved
+    }
+
+    const values = getGridValues();
+    if (values[index] === 0) {
+      values[index] = solution[index];
       setGridValues(values);
-    } else {
-      alert("No solution found!");
     }
   }
 
-  function revealAll() {
-    solveSudoku();
+  function clearGrid() {
+    solution = null; // Clear the stored solution
+    document
+      .querySelectorAll("#grid input")
+      .forEach((input) => (input.value = ""));
   }
 });
