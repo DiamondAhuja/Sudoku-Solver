@@ -22,7 +22,7 @@ body {
 }
 
 #grid input.user-input {
-    background-color: #e0f7fa; /* Change this color as needed */
+    background-color: #e0f7fa; 
 }
 
 #grid input:nth-child(3n+1) {
@@ -50,4 +50,14 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    background-color: #007BFF; /* Change this color as needed */
+    color: #fff; /* Ensure text is readable */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Modular look */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }

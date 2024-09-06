@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     input.setAttribute("maxlength", "1");
     input.addEventListener("input", () => markUserInput(input));
     input.addEventListener("click", () => revealCell(i));
+    input.addEventListener("keydown", (event) => navigateGrid(event, i));
     grid.appendChild(input);
   }
 
@@ -32,6 +33,34 @@ document.addEventListener("DOMContentLoaded", function () {
         input.classList.remove("user-input");
       }
     });
+  }
+
+  function navigateGrid(event, index) {
+    const rowSize = 9;
+    let newIndex;
+
+    switch (event.key) {
+      case "ArrowUp":
+        newIndex = index - rowSize;
+        break;
+      case "ArrowDown":
+        newIndex = index + rowSize;
+        break;
+      case "ArrowLeft":
+        newIndex = index - 1;
+        break;
+      case "ArrowRight":
+        newIndex = index + 1;
+        break;
+      default:
+        return;
+    }
+
+    if (newIndex >= 0 && newIndex < 81) {
+      document.querySelectorAll("#grid input")[newIndex].focus();
+    }
+
+    event.preventDefault();
   }
 
   function solveSudoku() {
